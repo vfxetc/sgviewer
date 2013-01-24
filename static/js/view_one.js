@@ -1,5 +1,25 @@
+(function($) { // Start of isolated scope.
 
-v = $('video')[0];
+var $container = $('#container');
+var $video = $('#video');
+var $canvas = $('#canvas');
+
+var video = $video.eq(0);
+
+
+function resizeVideoToWindow() {
+    var width = $container.width();
+    var height = width / 1280 * 720;
+    console.log('Resizing to: %d by %d', width, height);
+
+    $video.width(width);
+    $video.height(height);
+
+}
+
+$(window).resize(resizeVideoToWindow);
+resizeVideoToWindow();
+
 
 function zeroFill( number, width )
 {
@@ -11,11 +31,9 @@ function zeroFill( number, width )
   return number + ""; // always return a string
 }
 
-$(v).on('mousedown', function(e) {
-    console.log('mousedown', e);
-})
 
-$(v).on('timeupdate', function(e) { 
+$video.on('timeupdate', function(e) {
+
     var frames = Math.floor(24 * e.target.currentTime);
 
     var min = Math.floor(frames / (24 * 60));
@@ -30,25 +48,29 @@ $(v).on('timeupdate', function(e) {
     )
 })
 
+
 $(document).keydown(function(e) {
     switch (e.keyCode) {
 
         case 32: // space
-            if (v.paused) {
-                v.play();
+            if (video.paused) {
+                video.play();
             } else {
-                v.pause();
+                video.pause();
             }
             break;
 
         case 37: // left
-            v.pause();
-            v.currentTime -= 1 / 24;
+            video.pause();
+            video.currentTime -= 1 / 24;
             break;
 
         case 39: // right
-            v.pause();
-            v.currentTime += 1 / 24; 
+            video.pause();
+            video.currentTime += 1 / 24; 
             break;
     }
 });
+
+
+})(jQuery); // End of isolated scope.

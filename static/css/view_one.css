@@ -1,12 +1,11 @@
-#container {
-    width: 1280px;
-    height: 720px;
-    position: relative;
-    margins: 0 auto;
+html, body {
+    margin: 0;
+    padding: 0;
 }
 
-#video, #canvas {
-    position: absolute;
+#container {
+    position: relative;
+    margins: 0 auto;
 }
 
 #canvas {
