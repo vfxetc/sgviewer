@@ -6,8 +6,23 @@ html, body {
 #container {
     position: relative;
     margins: 0 auto;
+    padding-bottom: 2.6em; /* For the controls. */
 }
 
 #canvas {
     pointer-events: none;
+}
+
+.vjs-fade-in, .vjs-fade-out {
+    visibility: visible !important;
+    opacity: 1 !important;
+    transition-duration: 0s !important;
+}
+
+.vjs-default-skin {
+    bottom: -2.6em;
+}
+
+.vjs-loading-spinner {
+    display: none !important;
 }

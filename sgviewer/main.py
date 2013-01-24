@@ -2,6 +2,7 @@ import os
 
 from flask import Flask, request, render_template, redirect, url_for, abort
 
+from sgsession import Session
 import shotgun_api3_registry
 
 
@@ -41,7 +42,7 @@ def action_menu_item():
 def view_one(entity_type, entity_id):
 
     entity_type = entity_type.title()
-    sg = shotgun_api3_registry.connect()
+    sg = Session(shotgun_api3_registry.connect())
 
     entity = sg.find_one(entity_type, [('id', 'is', entity_id)], [
 

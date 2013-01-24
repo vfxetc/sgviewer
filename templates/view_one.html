@@ -2,13 +2,16 @@
 
 <head>
     <title>Latest Version of {{ entity['type'] }} {{ entity['id'] }}</title>
+
+    <link href="http://vjs.zencdn.net/c/video-js.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ static('/css/view_one.css') }}" />
 
 <body>
 
 
 <div id="container">
-    <video id="video" width="1280" height="720" controls autobuffer preload="auto" autoplay loop>
+    <video id="video" class="video-js vjs-default-skin" data-setup="{}"
+        controls autobuffer preload="auto" autoplay loop>
         <source type="video/mp4" src="{{ video_url }}"></source>
     </video>
 </div>
@@ -16,5 +19,6 @@
 <p id="currentTime">00:00:00.00</p>
 
 
+<script src="http://vjs.zencdn.net/c/video.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script src="{{ static('/js/view_one.js') }}"></script>

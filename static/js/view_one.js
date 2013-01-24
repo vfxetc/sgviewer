@@ -4,7 +4,6 @@ var $container = $('#container');
 var $video = $('#video');
 var $canvas = $('#canvas');
 
-var video = $video[0];
 
 
 function resizeVideoToWindow() {
@@ -29,7 +28,7 @@ function zeroFill( number, width )
 }
 
 
-$video.on('timeupdate', function(e) {
+$('video').on('timeupdate', function(e) {
 
     var frames = Math.floor(24 * e.target.currentTime);
 
@@ -47,6 +46,10 @@ $video.on('timeupdate', function(e) {
 
 
 $(document).keydown(function(e) {
+
+    // Need to grab this here because videojs turned our #video into a div.
+    var video = $('video')[0];
+
     switch (e.keyCode) {
 
         case 32: // space
