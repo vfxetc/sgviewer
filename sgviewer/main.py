@@ -31,6 +31,7 @@ def index():
     return render_template('hello.html')
 
 
+# Incoming from the Shotgun ActionMenuitem.
 @app.route('/action_menu_item', methods=['POST'])
 def action_menu_item():
     entity_type = request.form['entity_type'].lower()
@@ -38,7 +39,7 @@ def action_menu_item():
     return redirect(url_for('view_one', entity_type=entity_type, entity_id=entity_id))
 
 
-@app.route('/viewer/<entity_type>/<int:entity_id>')
+@app.route('/latest_version/<entity_type>/<int:entity_id>')
 def view_one(entity_type, entity_id):
 
     entity_type = entity_type.title()

@@ -7,7 +7,7 @@
         - Task
         - Shot
 -
-    url: http://keyweb:8000/action_menu_item
+    url: http://viewer.keystone/action_menu_item
     title: "Viewer / Play Latest Version [control-play-blue]"
     list_order: 1
     entity_types:
