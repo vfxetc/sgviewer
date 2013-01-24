@@ -6,21 +6,21 @@ html, body {
 #container {
     position: relative;
     margins: 0 auto;
-    padding-bottom: 2.6em; /* For the controls. */
+    padding-bottom: 39px; /* For the controls. */
 }
 
 #canvas {
     pointer-events: none;
 }
 
-.vjs-fade-in, .vjs-fade-out {
+.vjs-default-skin .vjs-controls.vjs-fade-in, .vjs-default-skin .vjs-controls.vjs-fade-out {
     visibility: visible !important;
     opacity: 1 !important;
     transition-duration: 0s !important;
 }
 
-.vjs-default-skin {
-    bottom: -2.6em;
+.vjs-default-skin .vjs-controls {
+    bottom: -39px;
 }
 
 .vjs-loading-spinner {
