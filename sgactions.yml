@@ -1,4 +1,16 @@
 -
-    url: http://localhost:8000
-    title: "Development / View Version [bug]"
+    url: http://localhost:8000/action_menu_item
+    title: "Development / Viewer: Play Latest Version [control-play-blue]"
     list_order: 101
+    entity_types:
+        - Version
+        - Task
+        - Shot
+-
+    url: http://keyweb:8000/action_menu_item
+    title: "Viewer / Play Latest Version [control-play-blue]"
+    list_order: 1
+    entity_types:
+        - Version
+        - Task
+        - Shot
