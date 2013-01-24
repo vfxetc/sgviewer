@@ -1,0 +1,14 @@
+#container {
+    width: 1280px;
+    height: 720px;
+    position: relative;
+    margins: 0 auto;
+}
+
+#video, #canvas {
+    position: absolute;
+}
+
+#canvas {
+    pointer-events: none;
+}

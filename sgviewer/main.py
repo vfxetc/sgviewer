@@ -5,7 +5,9 @@ from flask import Flask, request, render_template, redirect, url_for, abort
 import shotgun_api3_registry
 
 
-app = Flask(__name__)
+app = Flask(__name__,
+    static_url_path='',
+)
 app.root_path = os.path.dirname(os.path.dirname(__file__))
 
 
@@ -16,12 +18,12 @@ def index():
 
 @app.route('/action_menu_item', methods=['POST'])
 def action_menu_item():
-    entity_type = request.form['entity_type']
+    entity_type = request.form['entity_type'].lower()
     entity_id = request.form['selected_ids'].split(',')[0]
     return redirect(url_for('view_one', entity_type=entity_type, entity_id=entity_id))
 
 
-@app.route('/<entity_type>/<int:entity_id>')
+@app.route('/viewer/<entity_type>/<int:entity_id>')
 def view_one(entity_type, entity_id):
 
     entity_type = entity_type.title()
@@ -48,6 +50,9 @@ def view_one(entity_type, entity_id):
     if not video_url:
         abort(404)
 
-    return render_template('view_one.html', video_url=video_url)
+    return render_template('view_one.html',
+        entity=entity,
+        video_url=video_url,
+    )
 
 
