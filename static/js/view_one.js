@@ -69,7 +69,14 @@ $(document).keydown(function(e) {
             video.pause();
             video.currentTime += 1 / 24; 
             break;
+
+        default:
+            return;
     }
+
+    // We handled it.
+    e.stopPropagation();
+
 });
 
 
