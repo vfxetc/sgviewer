@@ -11,6 +11,20 @@ app = Flask(__name__,
 app.root_path = os.path.dirname(os.path.dirname(__file__))
 
 
+def static(path):
+    path = path.strip('/')
+    real_path = os.path.join(app.root_path, 'static', path)
+    if os.path.exists(real_path):
+        return '/%s?mt=%d' % (path, os.path.getmtime(real_path))
+    else:
+        return '/%s' % path
+
+
+@app.context_processor
+def inject_into_templates():
+    return dict(static=static)
+
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     return render_template('hello.html')
