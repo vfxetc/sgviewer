@@ -4,17 +4,14 @@ var $container = $('#container');
 var $video = $('#video');
 var $canvas = $('#canvas');
 
-var video = $video.eq(0);
+var video = $video[0];
 
 
 function resizeVideoToWindow() {
     var width = $container.width();
     var height = width / 1280 * 720;
-    console.log('Resizing to: %d by %d', width, height);
-
     $video.width(width);
     $video.height(height);
-
 }
 
 $(window).resize(resizeVideoToWindow);
@@ -24,11 +21,11 @@ resizeVideoToWindow();
 function zeroFill( number, width )
 {
   width -= number.toString().length;
-  if ( width > 0 )
+  if (width > 0)
   {
-    return new Array( width + (/\./.test( number ) ? 2 : 1) ).join( '0' ) + number;
+    return new Array(width + (/\./.test(number) ? 2 : 1)).join('0') + number;
   }
-  return number + ""; // always return a string
+  return number + ""; // Always return a string.
 }
 
 
