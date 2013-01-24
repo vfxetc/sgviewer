@@ -1,0 +1,9 @@
+<!doctype html>
+<h1>Hello, {{ request.method }}!</h1>
+
+<dl>
+    {% for k, v in request.form.iteritems()|sort %}
+        <dt>{{ k }}
+        <dd>{{ v }}
+    {% endfor %}
+</dl>
