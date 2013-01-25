@@ -3,8 +3,14 @@
 <head>
     <title>Latest Version of {{ entity['type'] }} {{ entity['id'] }}</title>
 
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
     <link href="http://vjs.zencdn.net/c/video-js.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ static('/css/view_one.css') }}" />
+
+    <script>
+        var entity_type = {{ entity['type'] | tojson | safe }};
+        var entity_id = {{ entity['id'] | tojson | safe }};
+    </script>
 
 <body>
 
@@ -19,6 +25,28 @@
 <p id="currentTime">00:00:00.00</p>
 
 
-<script src="http://vjs.zencdn.net/c/video.js"></script>
+<div id="notes-container">
+    <h2>Notes (<span id="notes-count">loading</span>):</h2>
+    <ol id="notes">
+        <script id="note-template" type="text/x-handlebars-template">{% raw %}
+            <li>
+                <h3>{{ subject }}</h3>
+                <div class="note-content">
+                    {{ content }}
+                </div>
+                <div class="note-tagline">
+                    Posted by <span class="note-created-by">{{ created_by.name }}</span>
+                    at <span class="note-created-at">{{ created_at }}</span>.
+                </div>
+            </li>
+        {% endraw %}</script>
+    </ol>
+</div>
+
+
+
+<!-- Scripts load at the very end. -->
+<script src="//vjs.zencdn.net/c/video.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.rc.2/handlebars.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script src="{{ static('/js/view_one.js') }}"></script>

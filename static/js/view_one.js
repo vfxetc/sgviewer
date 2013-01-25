@@ -80,4 +80,24 @@ $(document).keydown(function(e) {
 });
 
 
+
+// Get the notes.
+var note_template = Handlebars.compile($('#note-template').html());
+var note_api_endpoint = '/notes/' + entity_type + '/' + entity_id + '.json'
+$.getJSON(note_api_endpoint, function(notes) {
+
+    $('#notes-count').text(notes.length || 'none');
+    for (var i = 0; i < notes.length; i++) {
+        var note = notes[i];
+        console.log(i, note);
+
+        var html = note_template(note);
+        $(html).appendTo('#notes');
+
+    }
+
+})
+
+
+
 })(jQuery); // End of isolated scope.

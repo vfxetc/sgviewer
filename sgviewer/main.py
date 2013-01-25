@@ -1,3 +1,5 @@
+import functools
+import json
 import os
 
 from flask import Flask, request, render_template, redirect, url_for, abort
@@ -10,6 +12,10 @@ app = Flask(__name__,
     static_url_path='',
 )
 app.root_path = os.path.dirname(os.path.dirname(__file__))
+
+
+def Shotgun():
+    return Session(shotgun_api3_registry.connect())
 
 
 def static(path):
@@ -43,7 +49,7 @@ def action_menu_item():
 def view_one(entity_type, entity_id):
 
     entity_type = entity_type.title()
-    sg = Session(shotgun_api3_registry.connect())
+    sg = Shotgun()
 
     entity = sg.find_one(entity_type, [('id', 'is', entity_id)], [
 
@@ -70,5 +76,43 @@ def view_one(entity_type, entity_id):
         entity=entity,
         video_url=video_url,
     )
+
+
+def api_endpoint(func):
+    @functools.wraps(func)
+    def _decorated(*args, **kwargs):
+        return json.dumps(func(*args, **kwargs), indent=4, sort_keys=True)
+    return _decorated
+
+
+@app.route('/notes/<entity_type>/<int:entity_id>.json')
+@api_endpoint
+def note_api(entity_type, entity_id):
+
+    entity_type = entity_type.title()
+    sg = Shotgun()
+
+    entity = sg.find_one(entity_type, [('id', 'is', entity_id)], ['notes'])
+    if not entity:
+        abort(404)
+
+    notes = entity['notes']
+    if not notes:
+        return []
+
+    fields = ('id', 'type', 'created_by', 'created_at', 'subject', 'content')
+    sg.fetch(notes, fields)
+
+    results = []
+    for note in notes:
+        note = dict((k, note[k]) for k in fields)
+        note['created_at'] = note['created_at'].isoformat()
+        results.append(note)
+
+    return results
+
+
+
+
 
 
