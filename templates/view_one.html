@@ -22,15 +22,16 @@
     </video>
 </div>
 
-<p id="currentTime">00:00:00.00</p>
-
 
 <div id="notes-container">
-    <h2>Notes (<span id="notes-count">loading</span>):</h2>
+    <h2>Notes (<span id="notes-count">...</span>):</h2>
     <ol id="notes">
         <script id="note-template" type="text/x-handlebars-template">{% raw %}
-            <li>
+            <li class="note">
                 <h3>{{ subject }}</h3>
+                {{#if created_by.image }}
+                    <img class="note-created-by-image" src="{{ created_by.image }}" />
+                {{/if}}
                 <div class="note-content">
                     {{ content }}
                 </div>

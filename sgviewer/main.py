@@ -101,7 +101,8 @@ def note_api(entity_type, entity_id):
         return []
 
     fields = ('id', 'type', 'created_by', 'created_at', 'subject', 'content')
-    sg.fetch(notes, fields)
+    extra = ('created_by.HumanUser.image', )
+    sg.fetch(notes, fields + extra)
 
     results = []
     for note in notes:

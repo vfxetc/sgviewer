@@ -28,21 +28,20 @@ function zeroFill( number, width )
 }
 
 
-$('video').on('timeupdate', function(e) {
+VideoJS.formatTime = function(t) {
 
-    var frames = Math.floor(24 * e.target.currentTime);
-
+    var frames = Math.floor(24 * t) + 1;
     var min = Math.floor(frames / (24 * 60));
     var sec = Math.floor(frames / 24);
     var frame = frames % 24;
 
-    $('#currentTime').text(
+    return (
         zeroFill(min, 2) + ":" +
         zeroFill(sec, 2) + ':' +
         zeroFill(frame, 2) + " (" +
         frames + ")"
-    )
-})
+    );
+}
 
 
 $(document).keydown(function(e) {
@@ -76,6 +75,7 @@ $(document).keydown(function(e) {
 
     // We handled it.
     e.stopPropagation();
+    e.preventDefault();
 
 });
 
@@ -95,6 +95,9 @@ $.getJSON(note_api_endpoint, function(notes) {
         $(html).appendTo('#notes');
 
     }
+
+    // This often adds a scrollbar, so we need to adjust the width.
+    resizeVideoToWindow();
 
 })
 
