@@ -1,6 +1,7 @@
 import functools
 import json
 import os
+import datetime
 
 from flask import Flask, request, render_template, redirect, url_for, abort
 
@@ -78,10 +79,12 @@ def view_one(entity_type, entity_id):
     )
 
 
+_json_dt_handler = lambda obj: obj.isoformat() if isinstance(obj, datetime.datetime) else None
+
 def api_endpoint(func):
     @functools.wraps(func)
     def _decorated(*args, **kwargs):
-        return json.dumps(func(*args, **kwargs), indent=4, sort_keys=True)
+        return json.dumps(func(*args, **kwargs), indent=4, sort_keys=True, default=_json_dt_handler)
     return _decorated
 
 
@@ -107,7 +110,6 @@ def note_api(entity_type, entity_id):
     results = []
     for note in notes:
         note = dict((k, note[k]) for k in fields)
-        note['created_at'] = note['created_at'].isoformat()
         results.append(note)
 
     return results
