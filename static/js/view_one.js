@@ -1,4 +1,30 @@
+
+var Shotgun = {};
+
+
 (function($) { // Start of isolated scope.
+
+
+Shotgun._call = function(method, data, success) {
+    return $.ajax({
+        'type': 'POST',
+        'url': '/shotgun/' + method,
+        'contentType': 'application/json',
+        'dataType': 'json',
+        'data': JSON.stringify(data),
+        'success': success
+    });
+}
+
+Shotgun.find_one = function(entity_type, filters, fields, success) {
+    return Shotgun._call('find_one', {
+        'entity_type': entity_type,
+        'filters': filters,
+        'fields': fields
+    }, success);
+}
+
+
 
 var $container = $('#container');
 var $video = $('#video');
@@ -44,7 +70,11 @@ VideoJS.formatTime = function(t) {
 }
 
 
-$(document).keydown(function(e) {
+$('body').keydown(function(e) {
+
+    if (e.target.tagName != 'BODY') {
+        return;
+    }
 
     // Need to grab this here because videojs turned our #video into a div.
     var video = $('video')[0];
@@ -80,6 +110,15 @@ $(document).keydown(function(e) {
 });
 
 
+function insert_notes(notes) {
+    for (var i = 0; i < notes.length; i++) {
+        var note = notes[i];
+        console.log(i, note);
+        var html = note_template(note);
+        $(html).insertBefore('#note-form-li');
+    }
+}
+
 
 // Get the notes.
 var note_template = Handlebars.compile($('#note-template').html());
@@ -87,14 +126,7 @@ var note_api_endpoint = '/notes/' + entity_type + '/' + entity_id + '.json'
 $.getJSON(note_api_endpoint, function(notes) {
 
     $('#notes-count').text(notes.length || 'none');
-    for (var i = 0; i < notes.length; i++) {
-        var note = notes[i];
-        console.log(i, note);
-
-        var html = note_template(note);
-        $(html).appendTo('#notes');
-
-    }
+    insert_notes(notes);
 
     // This often adds a scrollbar, so we need to adjust the width.
     resizeVideoToWindow();
@@ -102,5 +134,38 @@ $.getJSON(note_api_endpoint, function(notes) {
 })
 
 
+// Get image for new note.
+if (user_id) {
+    Shotgun.find_one('HumanUser', [['id', 'is', user_id]], ['image'], function(user) {
+        $('#note-form-avatar').show().attr('src', user.image);
+    });
+}
 
+
+// Create new notes.
+var $form = $('form');
+$form.submit(function() {
+
+    $.ajax({
+        'type': 'POST',
+        'url': $form.attr('action'),
+        'data': $form.serialize(),
+        'dataType': 'JSON',
+        success: insert_notes
+    })
+
+    this.reset();
+
+    return false;
+})
 })(jQuery); // End of isolated scope.
+
+
+
+
+
+
+
+
+
+

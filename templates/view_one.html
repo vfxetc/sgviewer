@@ -12,6 +12,7 @@
     <script>
         var entity_type = {{ entity['type'] | tojson | safe }};
         var entity_id = {{ entity['id'] | tojson | safe }};
+        var user_id = {{ session.get('user_id', 0) | int | tojson | safe }};
     </script>
 
 <body>
@@ -24,28 +25,53 @@
     </video>
 </div>
 
-
 <div id="notes-container">
     <h2>Notes (<span id="notes-count">...</span>):</h2>
-    <ol id="notes">
+    <ol id="notes" class="clearfix">
         <script id="note-template" type="text/x-handlebars-template">{% raw %}
             <li class="note">
-                <h3>{{ subject }}</h3>
                 {{#if created_by.image }}
-                    <img class="note-created-by-image" src="{{ created_by.image }}" />
+                    <img class="note-created-by-image" src="{{ created_by.image }}" >
                 {{/if}}
                 <div class="note-content">
                     {{ content }}
                 </div>
+                <ul class="note-links">
+                    {{# each links }}
+                        <li class="label label-info">
+                            <a href="https://keystone.shotgunstudio.com/detail/{{type}}/{{id}}">
+                                {{type}} "{{code}}"
+                            </a>
+                        </li>
+                    {{/each}}
+                </ul>
                 <div class="note-tagline">
                     Posted by <span class="note-created-by">{{ created_by.name }}</span>
                     at <span class="note-created-at">{{ created_at }}</span>.
                 </div>
             </li>
         {% endraw %}</script>
+
+        <li id="note-form-li" class="note">
+
+            <img id="note-form-avatar" class="note-created-by-image hide" >
+
+            <form id="note-form" method="post" action="{{ url_for('new_note_api') }}">
+                <fieldset>
+
+
+                    <input type="hidden" name="version_id" value="{{ latest_version['id'] }}">
+
+                    <textarea name="content" placeholder="Write a new note!"></textarea>
+                    <br>
+                    <button class="btn btn-primary">Post New Note</button>
+
+                </fieldset>
+            </form>
+
+        </li>
     </ol>
 </div>
-
 
 
 <!-- Scripts load at the very end. -->

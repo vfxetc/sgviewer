@@ -33,25 +33,30 @@
 
 
 
+
+#notes {
+    list-style-type: none;
+}
+
 #notes-container {
     margin: 0 2em;
 }
 
 .note {
+    padding-left: 60px;
     margin: 1em 4em 2em 0;
     clear: left;
 }
 
-.note h3 {
-    font-size: 1.2em;
-}
-
 .note-created-by-image {
-    max-width: 75px;
-    max-height: 75px;
+    max-width: 60px;
+    max-height: 60px;
     float: left;
+    margin-left: -60px;
     margin-right: 20px;
     margin-bottom: 2em;
+    border: 1px dashed #aaa;
+    padding: 4px;
 }
 
 .note-tagline {
@@ -63,4 +68,17 @@
 .note-tagline span {
     font-weight: bold;
     color: #444;
+}
+
+.note-links {
+    margin-top: 6px;
+}
+
+.note-links a {
+    color: #fff;
+}
+
+#note-form textarea {
+    min-width: 460px;
+    min-height: 80px;
 }

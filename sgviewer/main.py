@@ -3,7 +3,7 @@ import json
 import os
 import datetime
 
-from flask import Flask, request, render_template, redirect, url_for, abort
+from flask import Flask, request, render_template, redirect, url_for, abort, session
 
 from sgsession import Session
 import shotgun_api3_registry
@@ -13,6 +13,7 @@ app = Flask(__name__,
     static_url_path='',
 )
 app.root_path = os.path.dirname(os.path.dirname(__file__))
+app.config.from_object('sgviewer.config')
 
 
 def Shotgun():
@@ -41,6 +42,10 @@ def index():
 # Incoming from the Shotgun ActionMenuitem.
 @app.route('/action_menu_item', methods=['POST'])
 def action_menu_item():
+
+    for key in ('user_id', 'user_login', 'session_uuid'):
+        session[key] = request.form[key]
+
     entity_type = request.form['entity_type'].lower()
     entity_id = request.form['selected_ids'].split(',')[0]
     return redirect(url_for('view_one', entity_type=entity_type, entity_id=entity_id))
@@ -62,6 +67,8 @@ def view_one(entity_type, entity_id):
 
     ])
 
+    latest_version = entity.get('sg_latest_version') or entity
+
     if not entity:
         abort(404)
 
@@ -75,6 +82,7 @@ def view_one(entity_type, entity_id):
 
     return render_template('view_one.html',
         entity=entity,
+        latest_version=latest_version,
         video_url=video_url,
     )
 
@@ -86,6 +94,40 @@ def api_endpoint(func):
     def _decorated(*args, **kwargs):
         return json.dumps(func(*args, **kwargs), indent=4, sort_keys=True, default=_json_dt_handler)
     return _decorated
+
+
+@app.route('/shotgun/<request_type>', methods=['POST'])
+@api_endpoint
+def shotgun_api(request_type):
+    sg = shotgun_api3_registry.connect()
+    func = getattr(sg, request_type)
+    print request.content_type
+    return func(**request.json)
+
+
+def _prepare_notes(notes):
+
+    if not notes:
+        return []
+
+    sg = notes[0].session
+
+    fields = ('id', 'type', 'created_by', 'created_at', 'subject', 'content', 'note_links')
+    extra = ('created_by.HumanUser.image', )
+    sg.fetch(notes, fields + extra)
+
+    results = []
+    for note in notes:
+        note = dict((k, note[k]) for k in fields)
+        links = note.pop('note_links')
+        note['links'] = [{
+            'type': link['type'],
+            'id': link['id'],
+            'code': link.get('code') or link.get('name'),
+        } for link in links]
+        results.append(note)
+
+    return results
 
 
 @app.route('/notes/<entity_type>/<int:entity_id>.json')
@@ -100,19 +142,28 @@ def note_api(entity_type, entity_id):
         abort(404)
 
     notes = entity['notes']
-    if not notes:
-        return []
+    return _prepare_notes(notes)
 
-    fields = ('id', 'type', 'created_by', 'created_at', 'subject', 'content')
-    extra = ('created_by.HumanUser.image', )
-    sg.fetch(notes, fields + extra)
 
-    results = []
-    for note in notes:
-        note = dict((k, note[k]) for k in fields)
-        results.append(note)
+@app.route('/notes/new', methods=['POST'])
+@api_endpoint
+def new_note_api():
 
-    return results
+    sg = Shotgun()
+
+    version = sg.merge({'type': 'Version', 'id': int(request.form['version_id'])})
+    project, entity, publish, task = version.fetch(('project', 'entity', 'sg_publish', 'sg_task'))
+
+    note = sg.create('Note', {
+        'subject': 'Note',
+        'content': request.form['content'],
+        'created_by': {'type': 'HumanUser', 'id': int(session['user_id'])},
+        'user': {'type': 'HumanUser', 'id': int(session['user_id'])},
+        'note_links': filter(None, [version, entity]),
+        'project': project,
+    })
+
+    return _prepare_notes([note]);
 
 
 
