@@ -17,7 +17,7 @@ Shotgun._call = function(method, data, success) {
 }
 
 Shotgun.find_one = function(entity_type, filters, fields, success) {
-    return Shotgun._call('find_one', {
+    return this._call('find_one', {
         'entity_type': entity_type,
         'filters': filters,
         'fields': fields
@@ -142,9 +142,17 @@ $.getJSON(note_api_endpoint, function(notes) {
 
 // Get image for new note.
 if (user_id) {
-    Shotgun.find_one('HumanUser', [['id', 'is', user_id]], ['image'], function(user) {
-        $('#note-form-avatar').show().attr('src', user.image);
-    });
+
+    // See if we have it in localStorage.
+    var image = localStorage.getItem("user_image");
+    if (image) {
+        $('#note-form-avatar').show().attr('src', image);
+    } else {
+        Shotgun.find_one('HumanUser', [['id', 'is', user_id]], ['image'], function(user) {
+            localStorage.setItem("user_image", user.image);
+            $('#note-form-avatar').show().attr('src', user.image);
+        });
+    }
 }
 
 
