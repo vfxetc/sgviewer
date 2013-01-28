@@ -71,12 +71,14 @@ def view_one(entity_type, entity_id):
         'code', 'sg_qt',
 
         # Shot/Task fields:
+        'sg_latest_version', # Force the ID.
         'sg_latest_version.Version.sg_qt',
 
     ])
 
     if not entity:
         abort(404)
+
 
     latest_version = entity.get('sg_latest_version') or entity
     if latest_version['type'] != 'Version':
