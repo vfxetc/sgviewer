@@ -33,10 +33,16 @@ var $canvas = $('#canvas');
 
 
 function resizeVideoToWindow() {
-    var width = $container.width();
-    var height = width / 1280 * 720;
-    $video.width(width);
-    $video.height(height);
+    
+    var controls = 39; // I can't figure out how to calculate this.
+    var width = $(window).width();
+    var height = $(window).height() - controls;
+
+    // Determine which direction would be smaller.
+    var factor = Math.min(width / 1280, height / 720);
+
+    $video.width(1280 * factor);
+    $video.height(720 * factor);
 }
 
 $(window).resize(resizeVideoToWindow);

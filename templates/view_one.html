@@ -31,7 +31,7 @@
         <script id="note-template" type="text/x-handlebars-template">{% raw %}
             <li class="note">
                 {{#if created_by.image }}
-                    <img class="note-created-by-image" src="{{ created_by.image }}" >
+                    <img class="note-created-by-image img-polaroid" src="{{ created_by.image }}" >
                 {{/if}}
                 <div class="note-content">
                     {{ content }}
@@ -54,7 +54,7 @@
 
         <li id="note-form-li" class="note">
 
-            <img id="note-form-avatar" class="note-created-by-image hide" >
+            <img id="note-form-avatar" class="note-created-by-image img-polaroid hide" >
 
             <form id="note-form" method="post" action="{{ url_for('new_note_api') }}">
                 <fieldset>

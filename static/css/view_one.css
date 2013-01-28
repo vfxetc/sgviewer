@@ -1,10 +1,13 @@
 
 #container {
     position: relative;
-    margins: 0 auto;
     padding-bottom: 39px; /* For the controls. */
+    background-color: #000;
 }
 
+#video {
+    margin: 0 auto;
+}
 
 .vjs-default-skin .vjs-controls.vjs-fade-in, .vjs-default-skin .vjs-controls.vjs-fade-out {
     visibility: visible !important;
@@ -55,8 +58,6 @@
     margin-left: -60px;
     margin-right: 20px;
     margin-bottom: 2em;
-    border: 1px dashed #aaa;
-    padding: 4px;
 }
 
 .note-tagline {
