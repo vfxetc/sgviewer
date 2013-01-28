@@ -34,7 +34,7 @@ var $canvas = $('#canvas');
 
 function resizeVideoToWindow() {
     
-    var controls = 39; // I can't figure out how to calculate this.
+    var controls = 39 + $('#breadcrumb').outerHeight(); // I can't figure out how to calculate this.
     var width = $(window).width();
     var height = $(window).height() - controls;
 

@@ -51,6 +51,14 @@ def action_menu_item():
     return redirect(url_for('view_one', entity_type=entity_type, entity_id=entity_id))
 
 
+def minimal(entity):
+    minimal = {'type': entity['type'], 'id': entity['id']}
+    for k in ('code', 'name'):
+        if k in entity:
+            minimal[k] = entity[k]
+    return minimal
+
+
 @app.route('/latest_version/<entity_type>/<int:entity_id>')
 def view_one(entity_type, entity_id):
 
@@ -67,10 +75,25 @@ def view_one(entity_type, entity_id):
 
     ])
 
-    latest_version = entity.get('sg_latest_version') or entity
-
     if not entity:
         abort(404)
+
+    latest_version = entity.get('sg_latest_version') or entity
+    if latest_version['type'] != 'Version':
+        abort(404)
+
+    # Fetch the breadcrumbs.
+    breadcrumbs = [latest_version]
+    while breadcrumbs[0]['type'] != 'Project':
+        parent = breadcrumbs[0].parent()
+        if parent is None:
+            break
+        breadcrumbs.insert(0, parent)
+
+    # Get codes or names on all the breadcrumbs
+    need_fetching = [x for x in breadcrumbs if all(k not in x for k in ('code', 'name'))]
+    if need_fetching:
+        sg.fetch(need_fetching, ['code', 'name'])
 
     video_url_dict = (
         entity.get('sg_qt') or
@@ -83,6 +106,7 @@ def view_one(entity_type, entity_id):
     return render_template('view_one.html',
         entity=entity,
         latest_version=latest_version,
+        breadcrumbs=[minimal(x) for x in breadcrumbs],
         video_url=video_url,
     )
 

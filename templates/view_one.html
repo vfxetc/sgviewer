@@ -1,7 +1,7 @@
 <!doctype html>
 
 <head>
-    <title>Latest Version of {{ entity['type'] }} {{ entity['id'] }}</title>
+    <title>{{ entity['type'] }}: {{ entity.get('code') or entity.get('name') or entity['id'] }}</title>
 
     <link rel="icon" type="image/png" href="/favicon.png" />
     
@@ -17,6 +17,19 @@
 
 <body>
 
+<ul id="breadcrumb" class="breadcrumb">
+    {% for entity in breadcrumbs %}
+        <li>
+            <small>{{ entity['type'] }}:</small>
+            <a href="https://keystone.shotgunstudio.com/detail/{{ entity['type'] }}/{{ entity['id'] }}">
+                {{ entity.get('code') or entity.get('name') }}
+            </a>
+            {% if entity['type'] != 'Version' %}
+                <span class="divider">/</span>
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
 
 <div id="container">
     <video id="video" class="video-js vjs-default-skin" data-setup="{}"

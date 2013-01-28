@@ -1,4 +1,8 @@
 
+#breadcrumb {
+    margin: 0;
+}
+
 #container {
     position: relative;
     padding-bottom: 39px; /* For the controls. */
