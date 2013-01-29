@@ -71,7 +71,6 @@ def view_one(entity_type, entity_id):
         'code', 'sg_qt',
 
         # Shot/Task fields:
-        'sg_latest_version', # Force the ID.
         'sg_latest_version.Version.sg_qt',
 
     ])
@@ -84,8 +83,12 @@ def view_one(entity_type, entity_id):
     if latest_version['type'] != 'Version':
         abort(404)
 
-    # Fetch the breadcrumbs.
+    # Fetch the breadcrumbs, working backwards from the entity that we were
+    # given to make it obvious that it is coming from that Task, or Publish,
+    # or whatever.
     breadcrumbs = [latest_version]
+    if latest_version is not entity:
+        breadcrumbs.insert(0, entity)
     while breadcrumbs[0]['type'] != 'Project':
         parent = breadcrumbs[0].parent()
         if parent is None:
