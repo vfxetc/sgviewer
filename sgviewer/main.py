@@ -2,6 +2,7 @@ import functools
 import json
 import os
 import datetime
+import itertools
 
 from flask import Flask, request, render_template, redirect, url_for, abort, session
 
@@ -139,6 +140,8 @@ def _prepare_notes(notes):
     if not notes:
         return []
 
+    notes = list(set(notes))
+
     sg = notes[0].session
 
     fields = ('id', 'type', 'created_by', 'created_at', 'subject', 'content', 'note_links')
@@ -168,11 +171,32 @@ def note_api(entity_type, entity_id):
     entity_type = entity_type.title()
     sg = Shotgun()
 
-    entity = sg.find_one(entity_type, [('id', 'is', entity_id)], ['notes'])
+    fields = (
+
+        # Direct.
+        'notes',
+
+        # From a Version.
+        'sg_task.Task.notes',
+        'entity.Task.notes',
+        'entity.Shot.notes',
+        'entity.Asset.notes',
+
+        # From a Task.
+        'sg_latest_version.Version.notes',
+        'entity.Shot.notes',
+
+        # From a Shot.
+        'sg_latest_version.Version.notes',
+
+    )
+
+    entity = sg.find_one(entity_type, [('id', 'is', entity_id)], fields)
     if not entity:
         abort(404)
 
-    notes = entity['notes']
+    notes = itertools.chain(*[entity.get(field, []) for field in fields])
+
     return _prepare_notes(notes)
 
 
