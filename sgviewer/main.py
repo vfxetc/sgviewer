@@ -156,6 +156,8 @@ def _prepare_notes(notes):
         } for link in links]
         results.append(note)
 
+    results.sort(key=lambda e: e['created_at'])
+    
     return results
 
 
