@@ -137,10 +137,10 @@ def shotgun_api(request_type):
 
 def _prepare_notes(notes):
 
+    notes = list(set(notes))
+
     if not notes:
         return []
-
-    notes = list(set(notes))
 
     sg = notes[0].session
 
