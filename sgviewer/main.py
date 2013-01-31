@@ -18,7 +18,7 @@ app.config.from_object('sgviewer.config')
 
 
 def Shotgun():
-    return Session(shotgun_api3_registry.connect())
+    return Session(shotgun_api3_registry.connect('sgviewer'))
 
 
 def static(path):
@@ -210,7 +210,7 @@ def new_note_api():
     project, entity, publish, task = version.fetch(('project', 'entity', 'sg_publish', 'sg_task'))
 
     note = sg.create('Note', {
-        'subject': 'Note',
+        'subject': 'Note on %s' % (version.get('code') or version.get('name')),
         'content': request.form['content'],
         'created_by': {'type': 'HumanUser', 'id': int(session['user_id'])},
         'user': {'type': 'HumanUser', 'id': int(session['user_id'])},
