@@ -47,7 +47,7 @@
                     <img class="note-created-by-image img-polaroid" src="{{ this }}" >
                 {{/ created_by.image }}
                 {{^ created_by.image }}
-                    <img class="note-created-by-image img-polaroid" src="/img/generic-person.jpg" >
+                    <img class="note-created-by-image img-polaroid" src="http://robohash.org/generic-{{ created_by.id }}.png?size=128x128&bgset=bg2" >
                 {{/ created_by.image }}
                 <div class="note-content">
                     {{ content }}
