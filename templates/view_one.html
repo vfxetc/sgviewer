@@ -70,22 +70,31 @@
 
         <li id="note-form-li" class="note">
 
-            <img id="note-form-avatar" class="note-created-by-image img-polaroid hide" >
+            <img id="note-form-avatar" class="note-created-by-image img-polaroid" src="http://robohash.org/no_user_id.png?size=128x128&bgset=bg2" >
 
-            <form id="note-form" method="post" action="{{ url_for('new_note_api') }}">
-                <fieldset>
+            {% if session.get('user_id') %}
+                <form id="note-form" method="post" action="{{ url_for('new_note_api') }}">
+                    <fieldset>
 
 
-                    <input type="hidden" name="version_id" value="{{ latest_version['id'] }}">
+                        <input type="hidden" name="version_id" value="{{ latest_version['id'] }}">
 
-                    <textarea name="content" placeholder="Write a new note!"></textarea>
-                    <br>
-                    <button class="btn btn-primary">Post New Note</button>
+                        <textarea name="content" placeholder="Write a new note!"></textarea>
+                        <br>
+                        <button class="btn btn-primary">Post New Note</button>
 
-                </fieldset>
-            </form>
+                    </fieldset>
+                </form>
+            {% else %}
+
+                <p><strong>Unknown user: cannot comment!</strong></p>
+                <p>Please use the action menu in Shotgun to get here every now and
+                    again so that we can figure out who you are.</p>
+
+            {% endif %}
 
         </li>
+
     </ol>
 </div>
 
