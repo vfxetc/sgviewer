@@ -116,23 +116,30 @@ $('body').keydown(function(e) {
 });
 
 
-function insert_notes(notes) {
-    for (var i = 0; i < notes.length; i++) {
-        var note = notes[i];
-        console.log(i, note);
-        var html = note_template(note);
-        $(html).insertBefore('#note-form-li');
+function insert_events(events) {
+    for (var i = 0; i < events.length; i++) {
+        var e = events[i];
+        console.log(i, e);
+        var template = event_templates[e.type];
+        if (template !== undefined) {
+            var html = template(e);
+            $(html).insertBefore('#note-form-li');
+        }
     }
 }
 
 
 // Get the notes.
-var note_template = Handlebars.compile($('#note-template').html());
-var note_api_endpoint = '/notes/' + entity_type + '/' + entity_id + '.json'
-$.getJSON(note_api_endpoint, function(notes) {
 
-    $('#notes-count').text(notes.length || 'none');
-    insert_notes(notes);
+var event_templates = {
+    'Note': Handlebars.compile($('#history-note-template').html()),
+    'Version': Handlebars.compile($('#history-version-template').html())
+};
+var history_api_endpoint = '/history/' + entity_type + '/' + entity_id + '.json'
+$.getJSON(history_api_endpoint, function(res) {
+
+
+    insert_events(res.events);
 
     // This often adds a scrollbar, so we need to adjust the width.
     resizeVideoToWindow();
@@ -165,7 +172,7 @@ $form.submit(function() {
         'url': $form.attr('action'),
         'data': $form.serialize(),
         'dataType': 'JSON',
-        success: insert_notes
+        success: insert_events
     })
 
     this.reset();

@@ -3,6 +3,7 @@ import json
 import os
 import datetime
 import itertools
+import copy
 
 from flask import Flask, request, render_template, redirect, url_for, abort, session
 
@@ -164,9 +165,9 @@ def _prepare_notes(notes):
     return results
 
 
-@app.route('/notes/<entity_type>/<int:entity_id>.json')
+@app.route('/history/<entity_type>/<int:entity_id>.json')
 @api_endpoint
-def note_api(entity_type, entity_id):
+def history(entity_type, entity_id):
 
     entity_type = entity_type.title()
     sg = Shotgun()
@@ -197,7 +198,36 @@ def note_api(entity_type, entity_id):
 
     notes = itertools.chain(*[entity.get(field, []) for field in fields])
 
-    return _prepare_notes(notes)
+    parents = [entity]
+
+    if entity['type'] == 'Version':
+        entity = entity.fetch('entity')
+        parents.append(entity)
+
+    if entity['type'] == 'Task':
+        entity = entity.fetch('entity')
+        parents.append(entity)
+
+    if entity['type'] not in ('Shot', 'Asset'):
+        raise ValueError('Unusual version chain')
+
+    versions = sg.find('Version',
+        [('entity', 'is', e) for e in parents],
+        ['code', 'description', 'user', 'created_at'],
+        filter_operator='any',
+    )
+    
+    notes = _prepare_notes(notes)
+
+    versions = [x.as_dict() for x in versions]
+    for v in versions:
+        v.pop('notes', None)
+        v.get('entity', {}).pop('notes', None)
+
+    all_events = list(notes) + list(versions)
+    all_events.sort(key=lambda e: e['created_at'])
+
+    return {'events': all_events}
 
 
 @app.route('/notes/new', methods=['POST'])
