@@ -70,7 +70,7 @@ def view_one(entity_type, entity_id):
     entity = sg.find_one(entity_type, [('id', 'is', entity_id)], [
 
         # Version fields:
-        'code', 'sg_qt',
+        'code', 'sg_qt', 'description',
 
         # Shot/Task fields:
         'sg_latest_version.Version.sg_qt',
@@ -84,6 +84,9 @@ def view_one(entity_type, entity_id):
     latest_version = entity.get('sg_latest_version') or entity
     if latest_version['type'] != 'Version':
         abort(404)
+
+    # Make sure we have this.
+    latest_version.fetch('description')
 
     # Fetch the breadcrumbs, working backwards from the entity that we were
     # given to make it obvious that it is coming from that Task, or Publish,

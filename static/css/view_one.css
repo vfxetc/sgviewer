@@ -39,7 +39,14 @@
 }
 
 
+h2 {
+    font-size: 20px;
+    line-height: 24px;
+}
 
+#description {
+    margin: 0 2em;
+}
 
 #history {
     list-style-type: none;

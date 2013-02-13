@@ -38,6 +38,16 @@
     </video>
 </div>
 
+<div id="description"><h2>Description:</h2><p>
+
+    {% if not entity.get('description') %}
+        <em>No description</em>
+    {% else %}
+        {{ entity['description'] }}
+    {% endif %}
+
+</p></div>
+
 <div id="history-container">
     <h2>Related History:</h2>
     <ol id="history" class="clearfix">

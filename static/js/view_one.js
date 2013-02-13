@@ -140,7 +140,7 @@ $.getJSON(history_api_endpoint, function(res) {
 
 
     insert_events(res.events);
-
+    
     // This often adds a scrollbar, so we need to adjust the width.
     resizeVideoToWindow();
 
