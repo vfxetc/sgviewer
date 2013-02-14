@@ -216,16 +216,16 @@ def history(entity_type, entity_id):
 
     versions = sg.find('Version',
         [('entity', 'is', e) for e in parents],
-        ['code', 'description', 'user', 'created_at'],
+        ['code', 'description', 'user.HumanUser.name', 'user.HumanUser.image', 'created_at'],
         filter_operator='any',
     )
     
     notes = _prepare_notes(notes)
 
-    versions = [x.as_dict() for x in versions]
     for v in versions:
         v.pop('notes', None)
         v.get('entity', {}).pop('notes', None)
+    versions = [x.as_dict() for x in versions]
 
     all_events = list(notes) + list(versions)
     all_events.sort(key=lambda e: e['created_at'])
