@@ -4,11 +4,15 @@ import os
 import datetime
 import itertools
 import copy
+import logging
 
 from flask import Flask, request, render_template, redirect, url_for, abort, session
 
 from sgsession import Session
 import shotgun_api3_registry
+
+
+log = logging.getLogger(__name__)
 
 
 app = Flask(__name__,
@@ -61,10 +65,18 @@ def minimal(entity):
     return minimal
 
 
+def normalize_entity_type(entity_type):
+    entity_type = entity_type.title()
+    return {
+        'Publish': 'PublishEvent',
+        'Publishevent': 'PublishEvent',
+    }.get(entity_type, entity_type)
+
+
 @app.route('/latest_version/<entity_type>/<int:entity_id>')
 def view_one(entity_type, entity_id):
 
-    entity_type = entity_type.title()
+    entity_type = normalize_entity_type(entity_type)
     sg = Shotgun()
 
     entity = sg.find_one(entity_type, [('id', 'is', entity_id)], [
@@ -75,18 +87,30 @@ def view_one(entity_type, entity_id):
         # Shot/Task fields:
         'sg_latest_version.Version.sg_qt',
 
+        # Publish fields:
+        'sg_link.Task.sg_latest_version',
     ])
 
     if not entity:
+        log.warning('Could not find %s %d', entity_type, entity_id)
         abort(404)
 
 
-    latest_version = entity.get('sg_latest_version') or entity
+    latest_version = (
+        entity.get('sg_latest_version') or 
+        entity.get('sg_link.Task.sg_latest_version') or
+        entity
+    )
     if latest_version['type'] != 'Version':
+        log.warning('Could not resolve version from %s %d; got %s %d',
+            entity_type, entity_id,
+            latest_version['type'] if latest_version else None,
+            latest_version['id'] if latest_version else 0,
+        )
         abort(404)
 
-    # Make sure we have this.
-    latest_version.fetch('description')
+    # Make sure we have everything, since we wouldn't from a Publish.
+    latest_version.fetch(['code', 'name', 'sg_qt', 'description'])
 
     # Fetch the breadcrumbs, working backwards from the entity that we were
     # given to make it obvious that it is coming from that Task, or Publish,
