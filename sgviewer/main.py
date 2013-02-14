@@ -216,7 +216,7 @@ def history(entity_type, entity_id):
 
     versions = sg.find('Version',
         [('entity', 'is', e) for e in parents],
-        ['code', 'description', 'user.HumanUser.name', 'user.HumanUser.image', 'created_at'],
+        ['code', 'description', 'user.HumanUser.name', 'user.HumanUser.image', 'created_at', 'sg_task.Task.content'],
         filter_operator='any',
     )
     

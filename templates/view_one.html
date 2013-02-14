@@ -53,7 +53,7 @@
     <ol id="history" class="clearfix">
 
         <script id="history-note-template" type="text/x-handlebars-template">{% raw %}
-            <li class="event">
+            <li class="event event-type-{{type}}">
                 {{# created_by.image }}
                     <img class="created-by-image img-polaroid" src="{{ this }}" >
                 {{/ created_by.image }}
@@ -84,7 +84,7 @@
         {% endraw %}</script>
 
         <script id="history-version-template" type="text/x-handlebars-template">{% raw %}
-            <li class="event">
+            <li class="event event-type-{{type}}">
                 {{# user.image }}
                     <img class="created-by-image img-polaroid" src="{{ this }}" >
                 {{/ user.image }}
@@ -101,6 +101,17 @@
                     Created by <span class="created-by">{{ user.name }}</span>
                     at <span class="created-at">{{ created_at }}</span>.
                 </div>
+
+                <ul class="links">
+                    {{# sg_task }}
+                        <li class="label label-info">
+                            <a href="https://keystone.shotgunstudio.com/detail/{{type}}/{{id}}">
+                                {{type}} "{{content}}"
+                            </a>
+                        </li>
+                    {{/ sg_task}}
+                </ul>
+
             </li>
         {% endraw %}</script>
 

@@ -62,6 +62,15 @@ h2 {
     clear: left;
 }
 
+#history .event.event-type-Version {
+    opacity: 0.6;
+    -webkit-transition: opacity 0.5s;
+}
+
+#history .event.event-type-Version:hover {
+    opacity: 1;
+}
+
 #history h3 {
     font-size: 14px;
     line-height: 18px;
