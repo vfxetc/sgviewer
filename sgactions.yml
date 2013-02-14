@@ -1,18 +1,31 @@
 -
-    url: http://localhost:8000/action_menu_item
+    url: http://localhost:8000/action_menu_item?latest
     title: "Development / Viewer: Play Latest Version [control-play-blue]"
     list_order: 101
     entity_types:
-        - Version
         - Task
         - Shot
-        - PublishEvent
+
 -
-    url: http://viewer.keystone/action_menu_item
+    url: http://localhost:8000/action_menu_item
+    title: "Development / Viewer: Play [control-play-blue]"
+    list_order: 101
+    entity_types:
+        - Version
+        - PublishEvent
+
+-
+    url: http://viewer.keystone/action_menu_item?latest
     title: "Viewer / Play Latest Version [control-play-blue]"
     list_order: 1
     entity_types:
-        - Version
         - Task
         - Shot
+
+-
+    url: http://viewer.keystone/action_menu_item
+    title: "Viewer / Play [control-play-blue]"
+    list_order: 1
+    entity_types:
+        - Version
         - PublishEvent
