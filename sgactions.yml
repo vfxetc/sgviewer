@@ -6,6 +6,7 @@
         - Version
         - Task
         - Shot
+        - PublishEvent
 -
     url: http://viewer.keystone/action_menu_item
     title: "Viewer / Play Latest Version [control-play-blue]"
@@ -14,3 +15,4 @@
         - Version
         - Task
         - Shot
+        - PublishEvent
