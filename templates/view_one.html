@@ -57,8 +57,7 @@
 
                 {{# created_by.image }}
                     <img class="created-by-image img-polaroid pull-left" src="{{ this }}" >
-                {{/ created_by.image }}
-                {{^ created_by.image }}
+                {{ else }}
                     <img class="created-by-image img-polaroid pull-left" src="http://robohash.org/generic-{{ created_by.id }}.png?size=128x128&bgset=bg2" >
                 {{/ created_by.image }}
 
@@ -89,12 +88,12 @@
         {% endraw %}</script>
 
         <script id="history-version-template" type="text/x-handlebars-template">{% raw %}
+        
             <li class="media event-type-{{type}}">
 
                 {{# user.image }}
                     <img class="created-by-image img-polaroid pull-left" src="{{ this }}" >
-                {{/ user.image }}
-                {{^ user.image }}
+                {{ else }}
                     <img class="created-by-image img-polaroid pull-left" src="http://robohash.org/generic-{{ user.id }}.png?size=128x128&bgset=bg2" >
                 {{/ user.image }}
 
@@ -121,8 +120,8 @@
                     </ul>
                 </div>
 
-
             </li>
+
         {% endraw %}</script>
 
         <li id="note-form-li" class="event-type-Note media">

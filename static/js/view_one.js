@@ -135,6 +135,11 @@ var event_templates = {
     'Note': Handlebars.compile($('#history-note-template').html()),
     'Version': Handlebars.compile($('#history-version-template').html())
 };
+
+Handlebars.registerHelper('if_eq', function(a, b, fn, elseFn) {
+    return (a === b) ? fn() : elseFn();
+});
+
 var history_api_endpoint = '/history/' + entity_type + '/' + entity_id + '.json'
 $.getJSON(history_api_endpoint, function(res) {
 
