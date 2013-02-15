@@ -9,7 +9,7 @@ PORT ?= 8000
 default: serve
 
 serve: 
-	${GUNICORN} -b 0.0.0.0:${PORT} -k gevent sgviewer.main:app
+	${GUNICORN} -p gunicorn.pid -b 0.0.0.0:${PORT} -k gevent sgviewer.main:app
 
 debug: 
 	${PYTHON} serve_local.py

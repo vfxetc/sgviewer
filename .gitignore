@@ -3,3 +3,4 @@
 *.make-sentinel
 
 /venv
+gunicorn.pid
