@@ -56,13 +56,6 @@ h2 {
     margin: 0 2em;
 }
 
-#history .event-type-Version {
-
-    /* opacity: 0.6;
-    -webkit-transition: opacity 0.5s;
-    //*/
-}
-
 #history .event-type-Note {
     position: relative;
     left: 60px;
@@ -95,26 +88,14 @@ h2 {
 }
 
 #history .tagline {
-    font-style: italic;
     color: #888;
-    font-size: 0.9em;
 }
 
-#history .tagline span {
-    font-weight: bold;
+#history .tagline strong {
     color: #444;
 }
 
 #history .links {
     margin: 6px 0;
-    font-size: 10px !important;
 }
 
-#history .links a {
-    color: #fff;
-}
-
-#note-form textarea {
-    min-width: 460px;
-    min-height: 80px;
-}

@@ -72,18 +72,16 @@
                         {{ content }}
                     </div>
 
-                    <div class="tagline">
-                        Posted by <span class="created-by">{{ created_by.name }}</span>
-                        at <span class="created-at">{{ created_at }}</span>.
-                    </div>
+                    <small class="tagline">
+                        Created by <strong>{{ created_by.name }}</strong>
+                        at <strong>{{ created_at }}</strong>.
+                    </small>
 
                     <ul class="links">
                         {{# each links }}
-                            <li class="label label-info">
-                                <a href="https://keystone.shotgunstudio.com/detail/{{type}}/{{id}}">
-                                    {{type}} "{{code}}"
-                                </a>
-                            </li>
+                            <li><a class="label label-info" href="https://keystone.shotgunstudio.com/detail/{{type}}/{{id}}">
+                                {{type}} "{{code}}"
+                            </a></li>
                         {{/each}}
                     </ul>
                 </div>
@@ -109,18 +107,16 @@
                         {{ description }}
                     </div>
 
-                    <div class="tagline">
-                        Created by <span class="created-by">{{ user.name }}</span>
-                        at <span class="created-at">{{ created_at }}</span>.
-                    </div>
+                    <small class="tagline">
+                        Created by <strong>{{ user.name }}</strong>
+                        at <strong>{{ created_at }}</strong>.
+                    </small>
 
                     <ul class="links">
                         {{# sg_task }}
-                            <li class="label label-info">
-                                <a href="https://keystone.shotgunstudio.com/detail/{{type}}/{{id}}">
-                                    {{type}} "{{content}}"
-                                </a>
-                            </li>
+                            <li><a class="label label-info" href="https://keystone.shotgunstudio.com/detail/{{type}}/{{id}}">
+                                {{type}} "{{content}}"
+                            </a></li>
                         {{/ sg_task}}
                     </ul>
                 </div>
@@ -142,7 +138,7 @@
 
                             <input type="hidden" name="version_id" value="{{ latest_version['id'] }}">
 
-                            <textarea name="content" placeholder="Write a new note!"></textarea>
+                            <textarea name="content" placeholder="Write a new note!" rows="3" class="input-xxlarge"></textarea>
                             <br>
                             <button class="btn btn-primary">Post New Note</button>
 
