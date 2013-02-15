@@ -56,18 +56,19 @@ h2 {
     margin: 0 2em;
 }
 
-#history .event {
-    padding-left: 60px;
-    margin: 1em 4em 2em 0;
-    clear: left;
-}
+#history .event-type-Version {
 
-#history .event.event-type-Version {
-    opacity: 0.6;
+    /* opacity: 0.6;
     -webkit-transition: opacity 0.5s;
+    //*/
 }
 
-#history .event.event-type-Version:hover {
+#history .event-type-Note {
+    position: relative;
+    left: 60px;
+}
+
+#history .event-type-Version:hover {
     opacity: 1;
 }
 
@@ -85,10 +86,12 @@ h2 {
 #history .created-by-image {
     max-width: 60px;
     max-height: 60px;
-    float: left;
-    margin-left: -90px;
-    margin-right: 20px;
-    margin-bottom: 2em;
+    margin-bottom: 12px;
+}
+
+#history .event-type-Version .created-by-image {
+    max-width: 40px;
+    max-height: 40px;
 }
 
 #history .tagline {

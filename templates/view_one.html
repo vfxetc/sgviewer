@@ -50,95 +50,113 @@
 
 <div id="history-container">
     <h2>Related History:</h2>
-    <ol id="history" class="clearfix">
+    <ol id="history" class="clearfix media-list">
 
         <script id="history-note-template" type="text/x-handlebars-template">{% raw %}
-            <li class="event event-type-{{type}}">
+            <li class="media event-type-{{type}}">
+
                 {{# created_by.image }}
-                    <img class="created-by-image img-polaroid" src="{{ this }}" >
+                    <img class="created-by-image img-polaroid pull-left" src="{{ this }}" >
                 {{/ created_by.image }}
                 {{^ created_by.image }}
-                    <img class="created-by-image img-polaroid" src="http://robohash.org/generic-{{ created_by.id }}.png?size=128x128&bgset=bg2" >
+                    <img class="created-by-image img-polaroid pull-left" src="http://robohash.org/generic-{{ created_by.id }}.png?size=128x128&bgset=bg2" >
                 {{/ created_by.image }}
-                <h3><a href="https://keystone.shotgunstudio.com/detail/{{type}}/{{id}}">
-                    <span class="type">{{ type }}</span>
-                </a></h3>
-                <div class="content">
-                    {{ content }}
-                </div>
-                <div class="tagline">
-                    Posted by <span class="created-by">{{ created_by.name }}</span>
-                    at <span class="created-at">{{ created_at }}</span>.
-                </div>
 
-                <ul class="links">
-                    {{# each links }}
-                        <li class="label label-info">
-                            <a href="https://keystone.shotgunstudio.com/detail/{{type}}/{{id}}">
-                                {{type}} "{{code}}"
-                            </a>
-                        </li>
-                    {{/each}}
-                </ul>
+                <div class="media-body">
+
+                    <h3><a href="https://keystone.shotgunstudio.com/detail/{{type}}/{{id}}">
+                        <span class="type">{{ type }}</span>
+                    </a></h3>
+
+                    <div class="content">
+                        {{ content }}
+                    </div>
+
+                    <div class="tagline">
+                        Posted by <span class="created-by">{{ created_by.name }}</span>
+                        at <span class="created-at">{{ created_at }}</span>.
+                    </div>
+
+                    <ul class="links">
+                        {{# each links }}
+                            <li class="label label-info">
+                                <a href="https://keystone.shotgunstudio.com/detail/{{type}}/{{id}}">
+                                    {{type}} "{{code}}"
+                                </a>
+                            </li>
+                        {{/each}}
+                    </ul>
+                </div>
             </li>
         {% endraw %}</script>
 
         <script id="history-version-template" type="text/x-handlebars-template">{% raw %}
-            <li class="event event-type-{{type}}">
+            <li class="media event-type-{{type}}">
+
                 {{# user.image }}
-                    <img class="created-by-image img-polaroid" src="{{ this }}" >
+                    <img class="created-by-image img-polaroid pull-left" src="{{ this }}" >
                 {{/ user.image }}
                 {{^ user.image }}
-                    <img class="created-by-image img-polaroid" src="http://robohash.org/generic-{{ user.id }}.png?size=128x128&bgset=bg2" >
+                    <img class="created-by-image img-polaroid pull-left" src="http://robohash.org/generic-{{ user.id }}.png?size=128x128&bgset=bg2" >
                 {{/ user.image }}
-                <h3><a href="https://keystone.shotgunstudio.com/detail/{{type}}/{{id}}">
-                    <span class="type">{{ type }}</span>: {{ code }}
-                </a></h3>
-                <div class="content">
-                    {{ description }}
-                </div>
-                <div class="tagline">
-                    Created by <span class="created-by">{{ user.name }}</span>
-                    at <span class="created-at">{{ created_at }}</span>.
+
+                <div class="media-body">
+                    <h3><a href="https://keystone.shotgunstudio.com/detail/{{type}}/{{id}}">
+                        <span class="type">{{ type }}</span>: {{ code }}
+                    </a></h3>
+
+                    <div class="content">
+                        {{ description }}
+                    </div>
+
+                    <div class="tagline">
+                        Created by <span class="created-by">{{ user.name }}</span>
+                        at <span class="created-at">{{ created_at }}</span>.
+                    </div>
+
+                    <ul class="links">
+                        {{# sg_task }}
+                            <li class="label label-info">
+                                <a href="https://keystone.shotgunstudio.com/detail/{{type}}/{{id}}">
+                                    {{type}} "{{content}}"
+                                </a>
+                            </li>
+                        {{/ sg_task}}
+                    </ul>
                 </div>
 
-                <ul class="links">
-                    {{# sg_task }}
-                        <li class="label label-info">
-                            <a href="https://keystone.shotgunstudio.com/detail/{{type}}/{{id}}">
-                                {{type}} "{{content}}"
-                            </a>
-                        </li>
-                    {{/ sg_task}}
-                </ul>
 
             </li>
         {% endraw %}</script>
 
-        <li id="note-form-li" class="note">
+        <li id="note-form-li" class="event-type-Note media">
 
-            <img id="note-form-avatar" class="created-by-image img-polaroid" src="http://robohash.org/no_user_id.png?size=128x128&bgset=bg2" >
+            <img id="note-form-avatar" class="created-by-image img-polaroid pull-left" src="http://robohash.org/no_user_id.png?size=128x128&bgset=bg2" >
 
-            {% if session.get('user_id') %}
-                <form id="note-form" method="post" action="{{ url_for('new_note_api') }}">
-                    <fieldset>
+            <div class="media-object">
+
+                {% if session.get('user_id') %}
+                    <form id="note-form" method="post" action="{{ url_for('new_note_api') }}">
+                        <fieldset>
 
 
-                        <input type="hidden" name="version_id" value="{{ latest_version['id'] }}">
+                            <input type="hidden" name="version_id" value="{{ latest_version['id'] }}">
 
-                        <textarea name="content" placeholder="Write a new note!"></textarea>
-                        <br>
-                        <button class="btn btn-primary">Post New Note</button>
+                            <textarea name="content" placeholder="Write a new note!"></textarea>
+                            <br>
+                            <button class="btn btn-primary">Post New Note</button>
 
-                    </fieldset>
-                </form>
-            {% else %}
+                        </fieldset>
+                    </form>
+                {% else %}
 
-                <p><strong>Unknown user: cannot comment!</strong></p>
-                <p>Please use the action menu in Shotgun to get here every now and
-                    again so that we can figure out who you are.</p>
+                    <p><strong>Unknown user: cannot comment!</strong></p>
+                    <p>Please use the action menu in Shotgun to get here every now and
+                        again so that we can figure out who you are.</p>
 
-            {% endif %}
+                {% endif %}
+
+            </div>
 
         </li>
 
