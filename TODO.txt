@@ -1,0 +1,10 @@
+
+- Scrape icons/styling for statuses:
+
+  - icons from https://keystone.shotgunstudio.com/images/sg_icon_image_map.png
+  - style from https://keystone.shotgunstudio.com/stylesheets/base_38666.css
+  - `curl https://keystone.shotgunstudio.com/user/login` reveals the
+    build number (38725), but I don't know if that is helpful.
+
+  - json from any page source
+  - create .sg-status with background info and .sg-icon/.sg-icon-{type} with icon
